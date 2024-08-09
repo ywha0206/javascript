@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>carousel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        #wrapper ul {
+            width: 280px;
+            height: 390px;
+            border: 1px solid black;
+            position: relative;
+            /*overflow: hidden;*/
+            margin: 20px;
+        }
+        #wrapper ul li {
+            list-style: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transition: left 0.5s ease-out;
+        }
+
+        #wrapper ul li:nth-child(1){left: 0;}
+        #wrapper ul li:nth-child(n+2){left: 100%; }
+		
+        #wrapper ul li img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+    <script>
+        window.onload = function(){
+
+           
+            let current = 0;
+            const slides = document.getElementsByTagName('li');
+            const total = slides.length;
+        
+            setInterval(() => {
+                const nextIndex = (current + 1) % total;
+                slides[current].style.left = '-100%';
+                slides[nextIndex].style.left = 0;
+
+                  // 모든 이미지를 다시 오른쪽으로 초기화
+                for(let i = 0; i < total; i++) {
+                    if(i !== nextIndex) slides[i].style.left = '100%';
+                }
+
+                current = nextIndex;
+            }, 3000);
+
+        }
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <ul>
+            <li class="image1"><img src="images/1.jpg" alt="1"></li>
+            <li class="image2"><img src="images/2.jpg" alt="2"></li>
+            <li class="image3"><img src="images/3.jpg" alt="3"></li>
+        </ul>
+    </div>
+</body>
+</html>

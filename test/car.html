@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Slider with Mouse Movement</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #slider {
+            width: 500px;
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+        #slider img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            const slider = document.getElementById('slider');
+            const totalImages = 5; // 총 이미지 수, 이미지 파일 수에 맞게 조정 필요
+
+            slider.addEventListener('mousemove', function(event) {
+                const sliderRect = slider.getBoundingClientRect();
+                const x = event.clientX - sliderRect.left;
+                const sliderWidth = slider.offsetWidth;
+                const imgIndex = Math.min(Math.floor((x / sliderWidth) * totalImages), totalImages - 1);
+
+                console.log('imgIndex: ' + imgIndex);
+
+                // 첫 번째 img 태그의 src 속성 업데이트
+                document.querySelector('#slider img').src = `images/car/car${imgIndex}.jpg`;
+            });
+        };
+    </script>
+</head>
+<body>
+    <div id="slider">
+        <img src="images/car/car0.jpg" alt="Slider Image">
+    </div>
+</body>
+</html>
