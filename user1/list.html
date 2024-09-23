@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>User1::list</title>
+    <script>
+        window.onload = function() {
+            const table = document.getElementsByTagName('table')[0];
+
+            // 목록 데이터 요청
+            fetch('http://localhost:8080/ch09/user1')
+                .then(resp => resp.json())
+                .then(data => {
+                    console.log(data);
+
+                    for (const user of data) {
+        
+                        const tr = `<tr>
+                                        <td class="uid">${user.uid}</td>
+                                        <td>${user.name}</td>
+                                        <td>${user.birth}</td>
+                                        <td>${user.hp}</td>
+                                        <td>${user.age}</td>
+                                        <td>
+                                            <a href="#" class="mod">수정</a>
+                                            <a href="#" class="del">삭제</a>
+                                        </td>
+                                    </tr>`;
+                        table.insertAdjacentHTML('beforeend', tr);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+
+            document.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                if (e.target.className === 'del') {
+                    const tr = e.target.closest('tr');
+                    const uid = tr.querySelector('.uid').textContent;
+
+                    tr.remove();
+
+                    fetch('http://localhost:8080/ch09/user1/' + uid, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: localStorage.getItem('access_token'),
+                        }
+                    })
+                    .then(resp => resp.json())
+                    .then(data => {
+                        console.log(data);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+
+                } else if (e.target.className === 'mod') {
+                    const tr = e.target.closest('tr');
+                    const uid = tr.querySelector('.uid').textContent;
+                    window.location.replace('/user1/modify.html?uid=' + uid);
+
+                } else if (e.target.className === 'reg') {
+                    window.location.replace('/user1/register.html');
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<h3>User1 목록</h3>
+
+<a href="#" class="reg">등록</a>
+
+<table border="1">
+    <tr>
+        <th>아이디</th>
+        <th>이름</th>
+        <th>생년월일</th>
+        <th>휴대폰</th>
+        <th>나이</th>
+        <th>관리</th>
+    </tr>
+</table>
+</body>
+</html>

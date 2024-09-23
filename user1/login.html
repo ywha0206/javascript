@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <!-- 
+        날짜: 2024/09/13
+        이름: 박연화
+        내용: spring ch10 jwt 실습 연계
+    -->
+    <script>
+        window.onload = function(){
+
+            const form = document.form;
+
+            form.onsubmit = function(e){
+                e.preventDefault();
+
+                const jsonData = {
+                    "uid" : form.uid.value,
+                    "pass" : form.pass.value
+                }
+
+                fetch('http://localhost:8080/ch10/user/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(resp => resp.json())
+                    .then(data => {
+                        console.log(data);
+
+                        //access, refresh 토큰 저장
+                        localStorage.setItem('accessToken', data.access_token);
+                        localStorage.setItem('refreshToken', data.refresh_token);
+                        
+                        window.location.replace('/user1/login_success.html')
+
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        alert('일치하는 회원이 없습니다.');
+                    });
+
+            }
+
+
+        }
+    </script>
+</head>
+<body>
+    <h3>로그인</h3>
+    <form name="form" action="post">
+        <input type="text" name="uid" placeholder="아이디 입력"><br>
+        <input type="password" name="pass" placeholder="비밀번호 입력"><br>
+        <input type="submit" value="로그인">
+    </form>
+    
+</body>
+</html>

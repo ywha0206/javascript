@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        window.onload = function(){
+            const name = document.getElementsByClassName('name')[0];
+            const birth = document.querySelector('.birth');
+            const hp = document.querySelector('.hp');
+            const age = document.querySelector('.age');
+
+
+            const accessToken = localStorage.getItem('accessToken');
+            
+            fetch('http://localhost:8080/ch10/user/login', {
+                method: 'GET',
+                headers: {'Authorization': `Bearer ${accessToken}`}
+            })
+                    .then(resp => resp.json())
+                    .then(data => {
+                        console.log(data);
+                        name.innerText = `${data.name}`|| ''
+                        birth.innerText = `${data.birth}`|| ''
+                        hp.innerText = `${data.hp}`|| ''
+                        age.innerText = `${data.age}`|| ''
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+        }
+
+    </script>
+</head>
+<body>
+    <h3>login 성공! 축하</h3>
+    <a href="/user1/login.html">로그인</a>
+    <P><span class="name">뭐라고</span>님  환영합니다!</P>
+    <p>생년월일 : <span class="birth"></span></p>
+    <p>전화번호 : <span class="hp"></span></p>
+    <p>나이 : <span class="age"></span></p>
+</body>
+</html>
